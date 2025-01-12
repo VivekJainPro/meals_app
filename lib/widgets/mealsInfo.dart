@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:icons_plus/icons_plus.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:trial_app/models/mealsmodel.dart';
 import 'package:trial_app/screens/additionalInfoScreen.dart';
@@ -27,7 +26,7 @@ class Meals extends StatelessWidget {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => MealInfoScreen(toggleFavourite:toggleFavourite, currMeal: currMeal,),
+          builder: (context) => MealInfoScreen( currMeal: currMeal,),
         ),
       );
     }
@@ -87,11 +86,11 @@ class Meals extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         MealTraits(
-                          icun: Bootstrap.clock_fill,
+                          icun: Icons.timer,
                           dayta: '${currMeal.duration} min',
                         ),
                         MealTraits(
-                          icun: Bootstrap.cash,
+                          icun: Icons.money,
                           dayta: formattedAffordability,
                         ),
                         MealTraits(

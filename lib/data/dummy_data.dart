@@ -189,7 +189,7 @@ const dummyMeals = [
     id: 'm5',
     categories: [
       'c2'
-      'c5',
+          'c5',
       'c10',
     ],
     title: 'Salad with Smoked Salmon',
@@ -218,7 +218,7 @@ const dummyMeals = [
     ],
     isGlutenFree: true,
     isVegan: false,
-    isVegetarian: true,
+    isVegetarian: false,
     isLactoseFree: true,
   ),
   Meal(

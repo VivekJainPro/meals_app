@@ -5,14 +5,10 @@ import 'package:trial_app/screens/mealscreen.dart';
 
 class CategoryWidget extends StatelessWidget {
   const CategoryWidget(
-      {super.key,
-      required this.categorey,
-      required this.toggleFavourite,
-      required this.availableMeals});
+      {super.key, required this.categorey, required this.availableMeals});
 
   final List<Meal> availableMeals;
   final Categorey categorey;
-  final void Function(Meal thisMeal) toggleFavourite;
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +21,8 @@ class CategoryWidget extends StatelessWidget {
 
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => MealScreen(
-              toggleFavourite: toggleFavourite,
-              mealsToDisplay: filteredMeals,
-              title: categorey.title),
+          builder: (context) =>
+              MealScreen(mealsToDisplay: filteredMeals, categorey: categorey),
         ),
       );
     }
@@ -54,12 +48,15 @@ class CategoryWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                categorey.title,
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                textAlign: TextAlign.left,
+              Hero(
+                tag: categorey.id,
+                child: Text(
+                  categorey.title,
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                  textAlign: TextAlign.left,
+                ),
               ),
             ],
           ),

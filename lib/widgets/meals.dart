@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:icons_plus/icons_plus.dart';
-import 'package:transparent_image/transparent_image.dart';
 import 'package:trial_app/models/mealsmodel.dart';
 import 'package:trial_app/screens/additionalInfoScreen.dart';
 import 'package:trial_app/widgets/meal_item_trait.dart';
 
 class Meals extends StatelessWidget {
-  const Meals(
-      {super.key, required this.currMeal, required this.toggleFavourite});
+  const Meals({super.key, required this.currMeal});
   final Meal currMeal;
-  final void Function(Meal thisMeal) toggleFavourite;
   String get formattedAffordability {
     return currMeal.affordability.name[0].toUpperCase() +
         currMeal.affordability.name.substring(1);
@@ -27,32 +23,32 @@ class Meals extends StatelessWidget {
         context,
         MaterialPageRoute(
           builder: (context) => MealInfoScreen(
-            toggleFavourite: toggleFavourite,
             currMeal: currMeal,
           ),
         ),
       );
     }
 
-    return InkWell(
-      onTap: () {
-        NavigateToDetails();
-      },
-      child: Card(
-        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        clipBehavior: Clip.hardEdge,
-        elevation: 10,
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      clipBehavior: Clip.hardEdge,
+      elevation: 10,
+      child: InkWell(
+        onTap: () => NavigateToDetails(),
         child: Stack(
           children: [
-            FadeInImage(
-              placeholder: MemoryImage(kTransparentImage),
-              image: NetworkImage(currMeal.imageUrl),
-              fit: BoxFit.cover,
-              height: 240,
-              width: double.infinity,
+            Hero(
+              tag: currMeal.id,
+              child: FadeInImage(
+                placeholder: AssetImage('assets/food_loading.gif'),
+                image: NetworkImage(currMeal.imageUrl),
+                fit: BoxFit.cover,
+                height: 240,
+                width: double.infinity,
+              ),
             ),
             Positioned(
               right: 0,
@@ -88,11 +84,11 @@ class Meals extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         MealTraits(
-                          icun: Bootstrap.clock_fill,
+                          icun: Icons.timer,
                           dayta: '${currMeal.duration} min',
                         ),
                         MealTraits(
-                          icun: Bootstrap.cash,
+                          icun: Icons.money,
                           dayta: formattedAffordability,
                         ),
                         MealTraits(

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trial_app/models/mealsmodel.dart';
+import 'package:trial_app/providers/favourites_provider.dart';
 
-class MealInfoScreen extends StatelessWidget {
-  const MealInfoScreen(
-      {super.key, required this.currMeal, required this.toggleFavourite});
+class MealInfoScreen extends ConsumerWidget {
+  const MealInfoScreen({super.key, required this.currMeal});
   final Meal currMeal;
-  final void Function(Meal thisMeal) toggleFavourite;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final favMeals = ref.watch(FavouritesProvider);
+    final isFav = favMeals.contains(currMeal);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(currMeal.title),
@@ -16,10 +19,32 @@ class MealInfoScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              toggleFavourite(currMeal);
+              bool wasAdded =
+                  ref.read(FavouritesProvider.notifier).toggleFavMeal(currMeal);
+              ScaffoldMessenger.of(context).clearSnackBars();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(wasAdded
+                      ? 'Added to Favourites'
+                      : 'Removed from Favourites'),
+                ),
+              );
             },
-            icon: Icon(Icons.star),
-          )
+            icon: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 500),
+              transitionBuilder: (child, animation) => RotationTransition(
+                turns: Tween(begin: 0.5, end: 1.0).animate(animation),
+                child: FadeTransition(
+                  opacity: animation,
+                  child: child,
+                ),
+              ),
+              child: Icon(
+                isFav ? Icons.star : Icons.star_border_outlined,
+                key: ValueKey(isFav),
+              ),
+            ),
+          ),
         ],
       ),
       body: Padding(
@@ -29,11 +54,14 @@ class MealInfoScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.network(
-                currMeal.imageUrl,
-                fit: BoxFit.cover,
-                height: 300,
-                width: double.infinity,
+              Hero(
+                tag: currMeal.id,
+                child: Image.network(
+                  currMeal.imageUrl,
+                  fit: BoxFit.cover,
+                  height: 300,
+                  width: double.infinity,
+                ),
               ),
               SizedBox(
                 height: 10,
