@@ -1,4 +1,4 @@
-# trial_app
+# meals_app
 
 A new Flutter project.
 
